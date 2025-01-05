@@ -1,0 +1,33 @@
+<!-- Author: Ajay Singh -->
+<!-- Date: 05-01-2025 -->
+<!-- Version: 0.1 -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YTV Tags</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="loadingPage" class="loading">Loading...</div>
+    <div id="appContainer" class="hidden">
+        <h1 onclick="location.reload()">YTV Tags</h1>
+        <div class="input-wrapper">
+            <input type="text" id="urlInput" placeholder="Enter YouTube Video URL">
+            <button id="pasteButton" onclick="pasteFromClipboard()">
+                <img src="https://img.icons8.com/ios-glyphs/30/ff0000/paste.png" alt="Paste" />
+            </button>
+        </div>
+        <button onclick="fetchKeywords()">Get Tags</button>
+        <div class="output-wrapper">
+            <textarea id="keywordsOutput" placeholder="Keywords will be displayed here..." readonly></textarea>
+            <button id="copyButton" onclick="copyToClipboard()">
+                <img src="https://img.icons8.com/ios-glyphs/30/ff0000/copy.png" alt="Copy" />
+            </button>
+        </div>
+        <div id="loadingKeywords" class="hidden">Loading Tags...</div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
