@@ -1,6 +1,6 @@
 # YTV Tags
 
-[https://ajayparihar.github.io/ytv-tags](YTV-Tags)
+[YTV-Tags](https://ajayparihar.github.io/ytv-tags)
 
 ## Overview
 
