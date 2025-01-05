@@ -3,10 +3,8 @@
 // Version: 0.1
 
 // Constants
-const LOADING_PAGE_ID = "loadingPage";
 const CONTENT_ID = "appContainer";
 const URL_INPUT_ID = "urlInput";
-const LOADING_KEYWORDS_ID = "loadingKeywords";
 const KEYWORDS_OUTPUT_ID = "keywordsOutput";
 
 // Event Listeners
@@ -14,79 +12,57 @@ document.addEventListener("DOMContentLoaded", onDOMContentLoaded);
 
 // Functions
 function onDOMContentLoaded() {
-    toggleVisibility(LOADING_PAGE_ID, false);
     toggleVisibility(CONTENT_ID, true);
+    addEnterKeyListener(URL_INPUT_ID, fetchKeywords);
 }
 
+// Fetch keywords from the YouTube video URL
 async function fetchKeywords() {
     const url = getInputValue(URL_INPUT_ID);
-    const loadingKeywords = document.getElementById(LOADING_KEYWORDS_ID);
     const keywordsOutput = document.getElementById(KEYWORDS_OUTPUT_ID);
     
     if (url) {
-        showLoading(loadingKeywords, keywordsOutput);
+        if (!isValidYouTubeUrl(url)) {
+            keywordsOutput.value = 'Please enter a valid YouTube video URL.';
+            return;
+        }
         try {
+            keywordsOutput.value = 'Fetching keywords...';
             const response = await fetch(getProxyUrl(url));
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
             const text = await response.text();
             const keywords = extractKeywords(text);
             keywordsOutput.value = keywords || 'No keywords found in the video page source.';
         } catch (error) {
             handleError(error, keywordsOutput);
-        } finally {
-            hideLoading(loadingKeywords);
         }
     } else {
-        alert('Please enter a YouTube video URL');
         keywordsOutput.value = 'Please enter a YouTube video URL to extract keywords.';
     }
 }
 
-async function pasteFromClipboard() {
-    try {
-        const text = await navigator.clipboard.readText();
-        setInputValue(URL_INPUT_ID, text);
-        fetchKeywords(); // Automatically fetch keywords after pasting the URL
-    } catch (err) {
-        console.error('Failed to read clipboard contents: ', err);
-        alert('Failed to read clipboard contents. Please try again.');
-    }
-}
-
-function copyToClipboard() {
-    const keywordsOutput = document.getElementById(KEYWORDS_OUTPUT_ID);
-    navigator.clipboard.writeText(keywordsOutput.value).then(() => {
-        console.log('Keywords copied to clipboard');
-        alert('Keywords copied to clipboard');
-    }).catch(err => {
-        console.error('Failed to copy keywords: ', err);
-        alert('Failed to copy keywords. Please try again.');
-    });
-}
-
 // Helper Functions
-function showLoading(loadingElement, outputElement) {
-    loadingElement.classList.remove("hidden");
-    outputElement.value = '';
-}
 
-function hideLoading(loadingElement) {
-    loadingElement.classList.add("hidden");
-}
-
+// Get the proxy URL for fetching the page source
 function getProxyUrl(url) {
     return `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(url)}`;
 }
 
+// Extract keywords from the page source
 function extractKeywords(text) {
     const keywordMatch = text.match(/<meta\s+name=["']keywords["']\s+content=["']([^"']+)["']/i);
     return keywordMatch && keywordMatch[1];
 }
 
+// Handle errors during the fetch process
 function handleError(error, outputElement) {
     console.error('Error fetching page source:', error);
     outputElement.value = 'Error fetching page source: ' + error.message;
 }
 
+// Toggle visibility of an element
 function toggleVisibility(elementId, isVisible) {
     const element = document.getElementById(elementId);
     if (isVisible) {
@@ -96,10 +72,27 @@ function toggleVisibility(elementId, isVisible) {
     }
 }
 
+// Get the value of an input element
 function getInputValue(elementId) {
     return document.getElementById(elementId).value;
 }
 
+// Set the value of an input element
 function setInputValue(elementId, value) {
     document.getElementById(elementId).value = value;
+}
+
+// Add an event listener for the Enter key
+function addEnterKeyListener(elementId, callback) {
+    document.getElementById(elementId).addEventListener('keypress', function(event) {
+        if (event.key === 'Enter') {
+            callback();
+        }
+    });
+}
+
+// Validate if the URL is a YouTube video URL
+function isValidYouTubeUrl(url) {
+    const regex = /^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.?be)\/.+$/;
+    return regex.test(url);
 }

@@ -20,149 +20,111 @@
 body {
     background-color: var(--background-color);
     color: var(--text-color);
-    font-family: 'Roboto', sans-serif;
+    font-family: 'Lato', sans-serif;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    height: 100vh;
+    min-height: 100vh;
     margin: 0;
     padding: 20px;
     box-sizing: border-box;
 }
 
-a {
-    color: #ff4081;
-    transition: color var(--transition-duration) ease;
-}
-
-a:hover {
-    color: #ff79b0;
-}
-
-header, footer {
+/* Header */
+header {
     background-color: var(--container-background);
-    color: var(--text-color);
-}
-
-/* App Container */
-#appContainer {
-    height: 90%;
     width: 90%;
-    background-color: var(--container-background);
+    max-width: 800px;
+    color: var(--text-color);
+    text-align: center;
     padding: 20px;
     border-radius: var(--border-radius);
     box-shadow: var(--box-shadow);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
+    margin-bottom: 40px;
+    animation: fadeInUp 0.5s ease-in-out;
 }
 
-/* Utility Classes */
-.hidden {
-    display: none;
-}
-
-.loading {
-    font-size: 24px;
-    color: var(--text-color);
-}
-
-/* Headings */
-h1 {
-    margin-bottom: 30px;
-    font-size: 2.5rem;
-    text-align: center;
+header h1 {
+    font-size: 2rem;
+    font-weight: 600;
+    margin: 0;
     background: var(--primary-gradient);
+    background-clip: text;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     cursor: pointer;
     transition: transform var(--transition-duration) ease;
 }
 
-h1:hover {
-    transform: scale(1.1);
+header h1:hover {
+    transform: scale(1.02);
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+/* App Container */
+#appContainer {
+    background-color: var(--container-background);
+    width: 90%;
+    max-width: 800px;
+    padding: 20px;
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    animation: fadeInUp 0.5s ease-in-out;
 }
 
 /* Input Wrapper */
 .input-wrapper {
     position: relative;
-    width: 80%;
+    width: 100%;
     margin-bottom: 20px;
     display: flex;
-    align-items: center;
+    justify-content: center;
 }
 
-/* URL Input */
 #urlInput {
-    min-width: 80%;
-    max-width: 100%;
+    width: 100%;
     background-color: var(--input-background);
     color: var(--input-text-color);
     border: 2px solid transparent;
     border-radius: var(--border-radius);
-    padding: 15px;
-    font-size: 1.1rem;
-    transition: background-color var(--transition-duration) ease, border-color var(--transition-duration) ease, box-shadow var(--transition-duration) ease;
+    padding: 12px;
+    font-size: 1rem;
+    transition: background-color var(--transition-duration) ease, border-color var(--transition-duration) ease;
 }
 
 #urlInput:hover {
     background-color: #444;
     border-color: var(--button-hover-color);
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-.input-wrapper {
-    display: flex;
-    align-items: center;
-    width: 100%;
+    outline: none;
+    box-shadow: 0 0 10px rgba(255, 64, 129, 0.5);
 }
 
-#urlInput {
-    flex: 1;
-}
-
-#pasteButton {
-    margin-left: 10px;
-}
-/* Paste Button */ 
-#pasteButton {
-    position: absolute;
-    right: 2%;
-    background: none;
-    border: none;
-    cursor: pointer;
-    padding: 0;
-    transition: transform var(--transition-duration) ease;
-}
-
-#pasteButton img {
-    width: 25px;
-    height: 25px;
-}
-
-#pasteButton:hover {
-    transform: scale(1.1);
-}
-
-/* Input Container Buttons */
+/* Buttons */
 button {
-    margin: 20px auto;
     display: block;
-    padding: 15px 25px;
-    border: none;
-    border-radius: var(--border-radius);
+    width: 100%;
+    max-width: 150px;
+    padding: 12px;
     background: var(--primary-gradient);
     color: var(--text-color);
-    transition: background-color var(--transition-duration) ease, transform var(--transition-duration) ease;
+    border: none;
+    border-radius: var(--border-radius);
+    font-size: 1rem;
     cursor: pointer;
-    font-size: 1.1rem;
+    transition: background-color var(--transition-duration) ease, transform var(--transition-duration) ease, box-shadow var(--transition-duration) ease;
     box-shadow: var(--box-shadow);
+    align-self: center;
 }
 
 button:hover {
-    background-color: var(--button-hover-color);
+    background: var(--button-hover-color);
     transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 }
 
 /* Output Wrapper */
@@ -170,97 +132,64 @@ button:hover {
     position: relative;
     width: 100%;
     margin-top: 20px;
+    display: flex;
+    justify-content: center;
 }
 
-/* Textarea */
 textarea {
     width: 100%;
-    height: 200px;
+    height: 150px;
     background-color: var(--input-background);
     color: var(--input-text-color);
     border: 2px solid transparent;
     border-radius: var(--border-radius);
-    padding: 15px;
-    font-size: 1.1rem;
+    padding: 12px;
+    font-size: 1rem;
     resize: none;
-    transition: background-color var(--transition-duration) ease, border-color var(--transition-duration) ease, box-shadow var(--transition-duration) ease;
+    transition: background-color var(--transition-duration) ease, border-color var(--transition-duration) ease;
 }
 
 textarea:hover {
     background-color: #444;
     border-color: var(--button-hover-color);
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    outline: none;
+    box-shadow: 0 0 10px rgba(255, 64, 129, 0.5);
 }
 
-/* Copy Button */
-#copyButton {
-    position: absolute;
-    right: 2%;
-    bottom: 2%;
-    background: none;
-    border: none;
-    cursor: pointer;
-    padding: 0;
-    transition: transform var(--transition-duration) ease;
+/* Animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
 }
 
-#copyButton img {
-    width: 25px;
-    height: 25px;
-}
-
-#copyButton:hover {
-    transform: scale(1.1);
-}
-
-input, textarea {
-    background-color: var(--input-background);
-    color: var(--input-text-color);
-    border: 1px solid transparent;
-    padding: 10px;
-    transition: background-color var(--transition-duration) ease, border-color var(--transition-duration) ease, box-shadow var(--transition-duration) ease;
-}
-
-input:hover, textarea:hover {
-    background-color: #444;
-    border-color: var(--button-hover-color);
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-
-input::placeholder, textarea::placeholder {
-    color: #888;
-}
-
-nav {
-    background-color: var(--container-background);
-    color: var(--text-color);
-}
-
-nav a {
-    color: var(--primary-color);
-    transition: color var(--transition-duration) ease;
-}
-
-nav a:hover {
-    color: var(--button-hover-color);
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 /* Responsive Design */
 @media (max-width: 768px) {
-    #urlInput {
-        width: 100%;
+    #urlInput, textarea {
+        font-size: 0.9rem;
+        padding: 10px;
     }
 
     button {
         width: 100%;
-        padding: 15px;
-    }
-
-    .output-wrapper {
-        width: 100%;
+        padding: 10px;
     }
 
     textarea {
-        height: 150px;
+        height: 120px;
     }
 }
