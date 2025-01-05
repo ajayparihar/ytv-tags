@@ -72,4 +72,4 @@ The application uses CSS for styling the web page. Key styles include:
 
 ## License
 
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+This project is licensed under the MIT License. See the [LICENSE](./LICENSE) file for details.
