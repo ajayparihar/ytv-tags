@@ -1,6 +1,6 @@
 // Author: Ajay Singh
 // Date: 05-01-2025
-// Version: 0.1
+// Version: 0.2
 
 // Constants
 const CONTENT_ID = "appContainer";
@@ -10,16 +10,26 @@ const SPINNER_ID = "loadingSpinner";
 
 // Event Listeners
 document.addEventListener("DOMContentLoaded", onDOMContentLoaded);
+document
+  .getElementById("pasteButton")
+  .addEventListener("click", pasteClipboardText);
+document
+  .getElementById("copyButton")
+  .addEventListener("click", copyToClipboard);
 
 // Functions
+
+/**
+ * Initializes the app, sets up event listeners, and restores values from localStorage.
+ */
 function onDOMContentLoaded() {
   toggleVisibility(CONTENT_ID, true);
   addEnterKeyListener(URL_INPUT_ID, fetchKeywords);
 
-  // Restore input and output from localStorage
   const urlInput = document.getElementById(URL_INPUT_ID);
   const keywordsOutput = document.getElementById(KEYWORDS_OUTPUT_ID);
 
+  // Restore input and output from localStorage
   urlInput.value = localStorage.getItem("yt_url") || "";
   keywordsOutput.value = localStorage.getItem("yt_keywords") || "";
 
@@ -29,7 +39,9 @@ function onDOMContentLoaded() {
   });
 }
 
-// Fetch keywords from the YouTube video URL
+/**
+ * Fetches keywords for the YouTube video URL entered by the user.
+ */
 async function fetchKeywords() {
   const url = getInputValue(URL_INPUT_ID);
   const keywordsOutput = document.getElementById(KEYWORDS_OUTPUT_ID);
@@ -49,7 +61,6 @@ async function fetchKeywords() {
       }
       const text = await response.text();
       const keywords = extractKeywords(text);
-
       keywordsOutput.value =
         keywords || "No keywords found in the video page source.";
       saveKeywordsToStorage(keywordsOutput.value);
@@ -66,12 +77,20 @@ async function fetchKeywords() {
 
 // Helper Functions
 
-// Get the proxy URL for fetching the page source
+/**
+ * Returns the proxy URL for fetching the YouTube video page source.
+ * @param {string} url - The YouTube video URL.
+ * @returns {string} Proxy URL.
+ */
 function getProxyUrl(url) {
   return `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(url)}`;
 }
 
-// Extract keywords from the page source
+/**
+ * Extracts the keywords from the YouTube video page source.
+ * @param {string} text - The page source text.
+ * @returns {string|null} Extracted keywords or null.
+ */
 function extractKeywords(text) {
   const keywordMatch = text.match(
     /<meta\s+name=["']keywords["']\s+content=["']([^"']+)["']/i
@@ -79,14 +98,31 @@ function extractKeywords(text) {
   return keywordMatch && keywordMatch[1];
 }
 
-// Save extracted keywords to localStorage
+/**
+ * Saves extracted keywords to localStorage.
+ * @param {string} keywords - The extracted keywords.
+ */
 function saveKeywordsToStorage(keywords) {
   localStorage.setItem("yt_keywords", keywords);
 }
 
-// Show a spinner inside the output area
+/**
+ * Shows a spinner inside the specified output element while fetching data.
+ * @param {HTMLElement} outputElement - The output element to display the spinner in.
+ */
 function showSpinner(outputElement) {
   outputElement.value = ""; // Clear output text
+  const spinner = createSpinner();
+  const wrapper = outputElement.parentElement;
+  wrapper.style.position = "relative"; // Ensure the parent is relatively positioned
+  wrapper.appendChild(spinner);
+}
+
+/**
+ * Creates a spinner element.
+ * @returns {HTMLElement} The spinner element.
+ */
+function createSpinner() {
   const spinner = document.createElement("div");
   spinner.className = "spinner";
   spinner.id = SPINNER_ID;
@@ -98,13 +134,12 @@ function showSpinner(outputElement) {
   spinner.style.backgroundColor = "transparent";
   spinner.style.width = "40px";
   spinner.style.height = "40px";
-
-  const wrapper = outputElement.parentElement;
-  wrapper.style.position = "relative"; // Ensure the parent is relatively positioned
-  wrapper.appendChild(spinner);
+  return spinner;
 }
 
-// Hide the spinner from the output area
+/**
+ * Hides the spinner from the output area.
+ */
 function hideSpinner() {
   const spinner = document.getElementById(SPINNER_ID);
   if (spinner) {
@@ -112,35 +147,99 @@ function hideSpinner() {
   }
 }
 
-// Toggle visibility of an element
+/**
+ * Toggles visibility of an element based on the isVisible flag.
+ * @param {string} elementId - The ID of the element to toggle.
+ * @param {boolean} isVisible - Whether the element should be visible.
+ */
 function toggleVisibility(elementId, isVisible) {
   const element = document.getElementById(elementId);
-  if (isVisible) {
-    element.classList.remove("hidden");
-  } else {
-    element.classList.add("hidden");
-  }
+  element.classList.toggle("hidden", !isVisible);
 }
 
-// Get the value of an input element
+/**
+ * Returns the value of an input element.
+ * @param {string} elementId - The ID of the input element.
+ * @returns {string} The input element value.
+ */
 function getInputValue(elementId) {
   return document.getElementById(elementId).value;
 }
 
-// Add an event listener for the Enter key
+/**
+ * Adds an event listener for the Enter key to an input element.
+ * @param {string} elementId - The ID of the input element.
+ * @param {function} callback - The callback to run when Enter is pressed.
+ */
 function addEnterKeyListener(elementId, callback) {
-  document
-    .getElementById(elementId)
-    .addEventListener("keypress", function (event) {
-      if (event.key === "Enter") {
-        callback();
-      }
-    });
+  document.getElementById(elementId).addEventListener("keypress", (event) => {
+    if (event.key === "Enter") {
+      callback();
+    }
+  });
 }
 
-// Validate if the URL is a YouTube video URL
+/**
+ * Validates whether the given URL is a valid YouTube video URL.
+ * @param {string} url - The URL to validate.
+ * @returns {boolean} True if the URL is a valid YouTube video URL, false otherwise.
+ */
 function isValidYouTubeUrl(url) {
   const regex =
     /^https?:\/\/(www\.)?(youtube\.com\/watch\?v=|youtu\.be\/)[\w-]+$/;
   return regex.test(url);
+}
+
+/**
+ * Pastes the clipboard content into the URL input field.
+ */
+async function pasteClipboardText() {
+  try {
+    const clipboardText = await navigator.clipboard.readText();
+    document.getElementById(URL_INPUT_ID).value = clipboardText;
+  } catch (err) {
+    console.error("Failed to read clipboard contents: ", err);
+  }
+}
+
+/**
+ * Copies the output text to the clipboard and shows a toast notification.
+ */
+async function copyToClipboard() {
+  try {
+    const textToCopy = document.getElementById(KEYWORDS_OUTPUT_ID).value;
+
+    // Check if the text to copy is empty or contains only a hint message
+    if (
+      !textToCopy ||
+      textToCopy.trim() === "Keywords will be displayed here..."
+    ) {
+      // Show toast notification with a custom message
+      const toast = document.getElementById("toast");
+      toast.textContent = "No tags to copy!";
+      toast.classList.add("show");
+
+      // Remove toast after 1 second
+      setTimeout(() => {
+        toast.classList.remove("show");
+      }, 1000);
+
+      return; // Exit the function as there's nothing to copy
+    }
+
+    // If there is valid text, copy to clipboard
+    await navigator.clipboard.writeText(textToCopy);
+    console.log("Text copied to clipboard:", textToCopy);
+
+    // Show toast notification indicating success
+    const toast = document.getElementById("toast");
+    toast.textContent = "Text copied to clipboard!";
+    toast.classList.add("show");
+
+    setTimeout(() => {
+      toast.classList.remove("show");
+    }, 1000);
+  } catch (err) {
+    console.error("Failed to copy text to clipboard: ", err);
+  }
 }

@@ -1,6 +1,7 @@
 <!-- Author: Ajay Singh -->
 <!-- Date: 05-01-2025 -->
-<!-- Version: 0.1 -->
+<!-- Version: 0.2 -->
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -8,28 +9,59 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>YTV Tags</title>
+
+    <!-- External Stylesheets -->
     <link rel="stylesheet" href="styles.css">
-    <link rel="apple-touch-icon" sizes="180x180" href="favicon_io/">
-    <link rel="icon" type="image/png" sizes="32x32" href="favicon_io//favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="favicon_io//favicon-16x16.png">
-    <link rel="manifest" href="favicon_io//site.webmanifest">
+
+    <!-- Favicon Links -->
+    <link rel="apple-touch-icon" sizes="180x180" href="favicon_io/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon_io/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon_io/favicon-16x16.png">
+    <link rel="manifest" href="favicon_io/site.webmanifest">
+
+    <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;600&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 
 <body>
+
+    <!-- Header Section -->
     <header>
         <h1 onclick="location.reload()">YTV Tags</h1>
     </header>
+
+    <!-- Main App Container -->
     <div id="appContainer">
+
+        <!-- Input Section -->
         <div class="input-wrapper">
-            <input type="text" id="urlInput" placeholder="Enter YouTube Video URL">
+            <input type="text" id="urlInput" placeholder="Enter YouTube Video URL" />
+            <button id="pasteButton" aria-label="Paste URL">
+                <i class="fas fa-clone"></i>
+            </button>
         </div>
+
         <button onclick="fetchKeywords()">Get Tags</button>
+
+        <!-- Output Section -->
         <div class="output-wrapper">
             <textarea id="keywordsOutput" placeholder="Keywords will be displayed here..." readonly></textarea>
+            <button id="copyButton" aria-label="Copy to clipboard">
+                <i class="fas fa-clipboard" aria-hidden="true"></i>
+            </button>
         </div>
+
+        <!-- Toast Notification -->
+        <div id="toast" class="toast">Tags copied to clipboard!</div>
+
     </div>
+
+    <!-- External Script -->
     <script src="script.js"></script>
+
 </body>
 
 </html>
