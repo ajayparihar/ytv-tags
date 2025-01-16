@@ -38,9 +38,11 @@ This project uses a proxy API to fetch the page source. Ensure you have an inter
 ### Proxy API
 
 The application uses the following proxy API to fetch the page source:
+
 ```
 https://api.codetabs.com/v1/proxy?quest={URL}
 ```
+
 Replace `{URL}` with the encoded YouTube video URL.
 
 ### JavaScript Functions
