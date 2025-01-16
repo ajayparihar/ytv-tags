@@ -20,7 +20,7 @@ document
 // Functions
 
 /**
- * Initializes the app, sets up event listeners, and restores values from localStorage.
+ * Initializes the app, sets up event listeners.
  */
 function onDOMContentLoaded() {
   toggleVisibility(CONTENT_ID, true);
@@ -29,14 +29,9 @@ function onDOMContentLoaded() {
   const urlInput = document.getElementById(URL_INPUT_ID);
   const keywordsOutput = document.getElementById(KEYWORDS_OUTPUT_ID);
 
-  // Restore input and output from localStorage
-  urlInput.value = localStorage.getItem("yt_url") || "";
-  keywordsOutput.value = localStorage.getItem("yt_keywords") || "";
-
-  // Save input to localStorage on change
-  urlInput.addEventListener("input", () => {
-    localStorage.setItem("yt_url", urlInput.value);
-  });
+  // Clear input and output fields on page load to ensure fresh state
+  urlInput.value = "";
+  keywordsOutput.value = "";
 }
 
 /**
@@ -63,7 +58,6 @@ async function fetchKeywords() {
       const keywords = extractKeywords(text);
       keywordsOutput.value =
         keywords || "No keywords found in the video page source.";
-      saveKeywordsToStorage(keywordsOutput.value);
     } catch (error) {
       keywordsOutput.value = `Error: ${error.message}`;
     } finally {
@@ -96,14 +90,6 @@ function extractKeywords(text) {
     /<meta\s+name=["']keywords["']\s+content=["']([^"']+)["']/i
   );
   return keywordMatch && keywordMatch[1];
-}
-
-/**
- * Saves extracted keywords to localStorage.
- * @param {string} keywords - The extracted keywords.
- */
-function saveKeywordsToStorage(keywords) {
-  localStorage.setItem("yt_keywords", keywords);
 }
 
 /**
