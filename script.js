@@ -172,7 +172,7 @@ function addEnterKeyListener(elementId, callback) {
  */
 function isValidYouTubeUrl(url) {
   const regex =
-    /^https?:\/\/(www\.)?(youtube\.com\/watch\?v=|youtu\.be\/)[\w-]+$/;
+    /^https?:\/\/(www\.)?(youtube\.com\/(watch\?v=|shorts\/|embed\/|live\/)|youtu\.be\/)[\w-]+(\?.*)?$/;
   return regex.test(url);
 }
 
