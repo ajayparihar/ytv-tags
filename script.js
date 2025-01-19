@@ -42,10 +42,10 @@ async function fetchKeywords() {
   const keywordsOutput = document.getElementById(KEYWORDS_OUTPUT_ID);
 
   if (url) {
-    if (!isValidYouTubeUrl(url)) {
-      keywordsOutput.value = "Please enter a valid YouTube video URL.";
-      return;
-    }
+    // if (!isValidYouTubeUrl(url)) {
+    //   keywordsOutput.value = "Please enter a valid YouTube video URL.";
+    //   return;
+    // }
 
     try {
       showSpinner(keywordsOutput);
@@ -57,7 +57,7 @@ async function fetchKeywords() {
       const text = await response.text();
       const keywords = extractKeywords(text);
       keywordsOutput.value =
-        keywords || "No keywords found in the video page source.";
+        keywords || "No keywords found in the page source.";
     } catch (error) {
       keywordsOutput.value = `Error: ${error.message}`;
     } finally {
@@ -170,11 +170,11 @@ function addEnterKeyListener(elementId, callback) {
  * @param {string} url - The URL to validate.
  * @returns {boolean} True if the URL is a valid YouTube video URL, false otherwise.
  */
-function isValidYouTubeUrl(url) {
-  const regex =
-    /^https?:\/\/(www\.)?(youtube\.com\/(watch\?v=|shorts\/|embed\/|live\/)|youtu\.be\/)[\w-]+(\?.*)?$/;
-  return regex.test(url);
-}
+// function isValidYouTubeUrl(url) {
+//   const regex =
+//     /^https?:\/\/(www\.)?(youtube\.com\/(watch\?v=[\w-]+(?:&\S*)?|shorts\/[\w-]+|embed\/[\w-]+|live\/[\w-]+)|youtu\.be\/[\w-]+)(\?.*)?$/;
+//   return regex.test(url);
+// }
 
 /**
  * Pastes the clipboard content into the URL input field.
